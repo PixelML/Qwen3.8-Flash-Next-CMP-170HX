@@ -12,8 +12,8 @@ measured**. Inputs that are measured (checkpoint bytes) come from
 | Cards | 4 x 64 GiB = **256 GiB** aggregate | given platform target |
 | Usable VRAM fraction | 92% → **58.88 GiB/card**, **235.52 GiB** aggregate | assumed planning constant |
 | Checkpoint weight bytes | **175.35510186851025 GiB** (188,286,106,928 B) | measured (Hub API/tree) |
-| PLE bf16 portion | **≈ 95 GiB** | community-reported; verify from safetensors headers before any run |
-| AWQ INT4 residual | ≈ 175.355 − 95 ≈ **80.36 GiB** | inferred |
+| PLE bf16 portion | **95.43 GiB** (102,466,171,160 B) | measured (safetensors header audit, 2026-08-30) |
+| AWQ INT4 + visual + embed residual | 175.32 − 95.43 = **79.89 GiB** | measured split |
 | Full-attention layers | 12 of 48 (every 4th layer) | measured (config.json) |
 | KV geometry | 2 KV heads x head_dim 256, BF16 | measured (config.json) |
 
@@ -65,18 +65,18 @@ slack:     235.52 - 175.355 = 60.16 GiB for everything else
 ## Scenario B — CPU PLE offload (RECOMMENDED target)
 
 ```
-GPU:  residual AWQ weights ≈ 80.36 GiB  (≈ 20.09 GiB/card average)
+GPU:  residual AWQ weights = 79.89 GiB  (≈ 19.97 GiB/card average)
       + KV cache + activations + CUDA graphs + NCCL + temporaries
 CPU:  PLE bf16 ≈ 95 GiB (pinned host memory)
 RAM:  95 GiB x 1.25 = 118.75 GiB   (1.25x overhead ASSUMED, unmeasured)
       + pinned transfer buffers + runtime temporaries
 ```
 
-- PLE bf16 ≈ 95 GiB is **community-reported**; it must be re-derived from
-  safetensors header sizes before any run.
+- PLE bf16 95.43 GiB is **measured** from a safetensors header audit of all
+  38 shards, replacing the earlier community-reported ≈ 95 GiB estimate.
 - Host RAM: until measured, budget **1.25x** the PLE size ≈ **118.75 GiB**,
   i.e. plan for ≥ 128 GiB host RAM and prefer more. Untested.
-- Per-card average weight load ≈ 20.09 GiB → "20 GiB/card average."
+- Per-card average weight load ≈ 19.97 GiB → "20 GiB/card average."
 - Pinned-memory transfers, CUDA graph pools, NCCL buffers, and temporary
   activation buffers are all **untested** on this platform.
 
@@ -104,14 +104,14 @@ recurrent/indexer state.
 - Full-attn KV bytes: 32,768 x 24 KiB = **805,306,368 B ≈ 0.75 GiB per card**
   (replicated, inferred).
 - Residual VRAM per card before overheads:
-  20.09 (weights) + 0.75 (KV) = **20.84 GiB**
+  19.97 (weights) + 0.75 (KV) = **20.72 GiB**
 - Usable per card: **58.88 GiB**
 - Unmeasured overhead allowance (activations + CUDA graphs + NCCL +
   temporaries): assume a generous **6 GiB estimate** (untested).
-- Post-allocation headroom: 58.88 − 20.84 − 6 = **32.04 GiB = 54.4% of
+- Post-allocation headroom: 58.88 − 20.72 − 6 = **32.16 GiB = 54.6% of
   usable**.
 - 15% headroom threshold: 0.15 x 58.88 = **8.83 GiB**. Overheads would have
-  to exceed ≈ 29.2 GiB/card to break the rule.
+  to exceed ≈ 29.3 GiB/card to break the rule.
 
 **Verdict: Scenario B has at least 15% post-allocation headroom at 32k
 context — inferred PASS**, contingent on the ≈ 95 GiB PLE figure and the 1.25x
