@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/PixelML/Qwen3.8-Flash-Next-CMP-170HX/eval/configs/run-manifest.schema.json",
+  "title": "Run manifest",
+  "description": "One manifest per benchmark run against a pinned checkpoint. All free-form claims must carry a claim_label.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_id",
+    "date_utc",
+    "hardware_class",
+    "gpu_count",
+    "driver",
+    "runtime",
+    "model_revision",
+    "harness_revision",
+    "context_tokens",
+    "concurrency",
+    "outcome_class",
+    "claim_label",
+    "raw_output_references"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "type": "string", "const": "1" },
+    "run_id": { "type": "string", "minLength": 1, "description": "Unique run identifier, e.g. 20260901T120000Z-awq-baseline-ple-cpu-mtp-off" },
+    "date_utc": { "type": "string", "format": "date-time" },
+    "matrix_cell_id": { "type": "string", "description": "id from eval/configs/matrix.yaml, if this run corresponds to a matrix cell" },
+    "hardware_class": {
+      "type": "string",
+      "description": "Generic public hardware label, e.g. 'four-card CMP 170HX node (SM80)'. No hostnames, serials, or private IPs.",
+      "minLength": 1
+    },
+    "gpu_count": { "type": "integer", "minimum": 1 },
+    "driver": {
+      "type": "object",
+      "required": ["version"],
+      "properties": {
+        "version": { "type": "string", "minLength": 1 },
+        "cuda_version": { "type": "string" },
+        "kernel": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "runtime": {
+      "type": "object",
+      "description": "Serving runtime identity. Provide commit and/or image; at least one is required.",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "description": "e.g. vllm" },
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{7,40}$" },
+        "image": { "type": "string", "description": "Container image reference with digest" },
+        "pr_ref": { "type": "string", "description": "e.g. vllm-project/vllm#53899 head 935728b4a95e110d91a41ab4e02b6bed06ec66ab" }
+      },
+      "anyOf": [
+        { "required": ["commit"] },
+        { "required": ["image"] }
+      ],
+      "additionalProperties": false
+    },
+    "model_revision": {
+      "type": "string",
+      "description": "Pinned checkpoint revision, e.g. d39638a0e740fccb3e24ae0ea5cab34c15371ae6",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "harness_revision": {
+      "type": "string",
+      "description": "Git commit of this repository's harness used for the run",
+      "pattern": "^[0-9a-f]{7,40}$"
+    },
+    "context_tokens": { "type": "integer", "minimum": 1 },
+    "concurrency": { "type": "integer", "minimum": 1 },
+    "seed": { "type": "integer" },
+    "sampling": {
+      "type": "object",
+      "properties": {
+        "temperature": { "type": "number" },
+        "top_p": { "type": "number" },
+        "greedy": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "metrics": {
+      "type": "object",
+      "description": "Derived metrics. Throughput must be derived from the final usage object, never stream-event counts.",
+      "properties": {
+        "ttft_ms_p50": { "type": "number", "minimum": 0 },
+        "ttft_ms_p95": { "type": "number", "minimum": 0 },
+        "itl_ms_p50": { "type": "number", "minimum": 0 },
+        "itl_ms_p95": { "type": "number", "minimum": 0 },
+        "tok_s_per_stream": { "type": "number", "minimum": 0 },
+        "tok_s_aggregate": { "type": "number", "minimum": 0 },
+        "prompt_tokens_total": { "type": "integer", "minimum": 0 },
+        "output_tokens_total": { "type": "integer", "minimum": 0 },
+        "vram_gib_peak_per_card": { "type": "array", "items": { "type": "number", "minimum": 0 } },
+        "ram_gib_peak_host": { "type": "number", "minimum": 0 },
+        "power_w_peak_per_card": { "type": "array", "items": { "type": "number", "minimum": 0 } },
+        "requests_completed": { "type": "integer", "minimum": 0 },
+        "requests_failed": { "type": "integer", "minimum": 0 },
+        "retries": { "type": "integer", "minimum": 0 },
+        "gpu_hours": { "type": "number", "minimum": 0 }
+      },
+      "additionalProperties": true
+    },
+    "thermals": {
+      "type": "object",
+      "description": "Peak temperatures per card, in Celsius. Stop conditions in scripts/preflight-checklist.md.",
+      "properties": {
+        "core_c_peak_per_card": { "type": "array", "items": { "type": "number" } },
+        "mem_c_peak_per_card": { "type": "array", "items": { "type": "number" } },
+        "throttled": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "stability": {
+      "type": "object",
+      "properties": {
+        "xid_errors": { "type": "integer", "minimum": 0 },
+        "resets": { "type": "integer", "minimum": 0 },
+        "notes": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "outcome_class": {
+      "type": "string",
+      "enum": ["infrastructure", "compatibility", "capacity", "stability", "quality"],
+      "description": "infrastructure = environment/lease/storage failure; compatibility = runtime/model incompatibility; capacity = fit/VRAM/RAM exhaustion; stability = crash/hang/corruption under load; quality = completed run scored for results."
+    },
+    "claim_label": {
+      "type": "string",
+      "enum": ["measured", "inferred", "community-reported", "untested"],
+      "description": "Label for the headline claim of this manifest."
+    },
+    "score": {
+      "type": "object",
+      "description": "Task-family scores, deterministic where possible.",
+      "properties": {
+        "task_family": { "type": "string" },
+        "metric_name": { "type": "string" },
+        "value": { "type": "number" },
+        "repetitions": { "type": "integer", "minimum": 1 },
+        "judge_model_revision": { "type": "string", "description": "Required only if a pinned judge was unavoidable" }
+      },
+      "additionalProperties": true
+    },
+    "raw_output_references": {
+      "type": "array",
+      "description": "Paths/URIs to raw outputs (usage objects, logs). No weights, no secrets, no oversized files in this repository.",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "notes": { "type": "string" }
+  }
+}

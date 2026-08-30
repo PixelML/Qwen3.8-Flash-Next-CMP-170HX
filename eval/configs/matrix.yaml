@@ -1,0 +1,70 @@
+# Candidate run matrix — Qwen3.8-Flash-Next AWQ INT4 on 4 x CMP 170HX
+#
+# EVERY entry is a CANDIDATE only. Every item status is untested.
+# Do not execute anything until the gates in the repository README clear.
+matrix:
+  - id: awq-baseline-ple-cpu-mtp-off
+    description: >
+      AWQ INT4 baseline. PLE bf16 offloaded to pinned CPU memory.
+      MTP disabled. Primary quality/latency reference for all comparisons.
+    parallelism: TP4
+    offload: ple-cpu
+    mtp: {enabled: false}
+    context_tokens_max: 32768
+    status: untested
+
+  - id: awq-ple-cpu-mtp-on-k3
+    description: >
+      AWQ INT4 with MTP speculative decoding enabled at k=3 on top of the
+      baseline cell. Compares acceptance/throughput vs baseline.
+    parallelism: TP4
+    offload: ple-cpu
+    mtp: {enabled: true, k: 3}
+    context_tokens_max: 32768
+    status: untested
+
+  - id: awq-no-offload-fit-probe
+    description: >
+      Scenario A from docs/01-vram-ram-fit.md: everything on GPU, no PLE
+      offload. Bounded fit probe only; expected tight; runt-card risk.
+      Must run with conservative stop conditions and tiny context.
+    parallelism: TP4
+    offload: none
+    mtp: {enabled: false}
+    context_tokens_max: 8192
+    status: untested
+
+  - id: awq-safe-tp4
+    description: >
+      Safe-mode TP4: PLE CPU offload, MTP off, reduced max context, CUDA
+      graphs disabled if graph capture fails. Fallback when the baseline
+      cell hits capture or stability issues.
+    parallelism: TP4
+    offload: ple-cpu
+    mtp: {enabled: false}
+    cuda_graphs: disabled
+    context_tokens_max: 8192
+    status: untested
+
+  - id: awq-fallback-pp4
+    description: >
+      Pipeline-parallel fallback (PP4) if TP4 KV-head replication or NCCL
+      behavior blocks launch on SM80. Correctness first, throughput second.
+    parallelism: PP4
+    offload: ple-cpu
+    mtp: {enabled: false}
+    context_tokens_max: 32768
+    status: untested
+
+  - id: awq-aux-gpu-ple
+    description: >
+      Optional auxiliary-GPU PLE offload experiment. ONLY valid if upstream
+      lands the auxiliary-GPU PLE feature (vllm-project/vllm#53908 or
+      equivalent). Do not schedule otherwise.
+    parallelism: TP4
+    offload: ple-aux-gpu
+    mtp: {enabled: false}
+    context_tokens_max: 32768
+    preconditions:
+      - vllm-project/vllm#53908 implemented and merged
+    status: untested
