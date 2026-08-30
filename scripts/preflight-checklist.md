@@ -6,6 +6,11 @@ Post-run section is mandatory before releasing the lease.
 ## 0. Lease and gate check (hard blockers)
 
 - [ ] `seanphan/pixelml#57` is resolved/cleared (record date).
+- [ ] Lease order verified per master policy
+      (<https://github.com/seanphan/pixelml/issues/52#issuecomment-5468770811>):
+      the preceding rounds `seanphan/pixelml#47` then `seanphan/pixelml#58`
+      are published/released **before** this `seanphan/pixelml#56` lease is
+      used (record the release evidence for #47 and #58).
 - [ ] Exclusive **four-CMP** lease granted in `seanphan/pixelml#52` for this
       exact window; no other workload scheduled on the node.
 - [ ] Upstream decision gate met per `docs/02-runtime-compatibility.md`

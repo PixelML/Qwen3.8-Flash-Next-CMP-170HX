@@ -30,6 +30,18 @@ that is a different GPU architecture, a different topology, and a different
 quantization from our target (SM80, TP4, AWQ INT4). It must not be cited as
 evidence that SM80 works.
 
+### At-lease rule
+
+During the single AWQ INT4 baseline round (see `docs/03-evaluation-plan.md`):
+
+- Use the **minimum pinned upstream/runtime delta** required to attempt
+  startup — no speculative rebases, no cherry-picks beyond what launch needs.
+- Record **every patch and commit** (vLLM head, kernels, any local diffs) in
+  the run manifest (`eval/configs/run-manifest.schema.json`).
+- **No optimization patches** during the baseline round; optimization work is
+  parked per
+  <https://github.com/seanphan/pixelml/issues/52#issuecomment-5468770811>.
+
 ## Auxiliary-GPU PLE offload (optional path)
 
 - Feature request: <https://github.com/vllm-project/vllm/issues/53908>

@@ -3,6 +3,40 @@
 Status: plan only. **Untested** — no command in this plan has ever run on the
 target platform. Execution requires the gates in `README.md` to clear.
 
+## Baseline round scope
+
+Per the owner's narrowing of `seanphan/pixelml#56`
+(<https://github.com/seanphan/pixelml/issues/56#issuecomment-5468770817>) and
+master policy
+(<https://github.com/seanphan/pixelml/issues/52#issuecomment-5468770811>),
+the next execution is **ONE fixed baseline round** — not the full suite
+below. The round consists of exactly one fixed measurement set on the two
+ACTIVE matrix cells (`eval/configs/matrix.yaml`):
+
+1. **Startup / compatibility verdict** — launch the primary cell; record
+   launch success/failure and a classified verdict
+   (`infrastructure` / `compatibility` / `capacity` / `stability`).
+2. **Fixed speed + latency set** — the metrics listed under "Metrics to
+   capture per run" below, with **three repetitions where practical**
+   (skip rules per the "Seeds and sampling" section, justified in the
+   manifest).
+3. **Bounded quality/reliability smoke** — about 20–50 deterministic text
+   prompts; 10–20 structured tool-call checks; **1** long-context retrieval
+   check at 32k; 5–10 vision/chart checks.
+4. **Sanitized hardware receipts** — per-card power/thermal peaks, driver,
+   runtime commit, and topology, redacted per the publication boundary in
+   `AGENTS.md`.
+5. **Negative-verdict protocol** — if startup or a safety stop condition
+   fails, dump logs/thermals per `scripts/preflight-checklist.md`, classify
+   the run in the manifest, file the negative result, and **stop**: a
+   classified negative verdict completes the round.
+
+**PARKED:** the full five-family evaluation suite (task families 1–5 below,
+the split policy, and the cost model) is parked until **all four model
+baselines publish** per master policy. The methodology text below is kept
+unchanged for those later rounds; nothing in it is scheduled for the
+baseline round beyond the bounded smoke set above.
+
 ## Hypothesis and predicted result
 
 **Hypothesis (H1):** Qwen3.8-Flash-Next-AWQ-INT4 with PLE CPU offload serves

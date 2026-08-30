@@ -22,6 +22,26 @@ Two gates must clear before any resource-consuming work:
 
 Tracking issue: <https://github.com/seanphan/pixelml/issues/56>
 
+## Scope: one baseline round
+
+The owner has narrowed `seanphan/pixelml#56` to **ONE** Qwen3.8-Flash-Next
+AWQ INT4 baseline round (or a reproducible negative verdict), per
+[the owner's narrowing comment](https://github.com/seanphan/pixelml/issues/56#issuecomment-5468770817)
+and the master policy comment
+[seanphan/pixelml#52#issuecomment-5468770811](https://github.com/seanphan/pixelml/issues/52#issuecomment-5468770811).
+
+- `eval/configs/matrix.yaml` keeps exactly two ACTIVE cells for this round:
+  the primary baseline cell and its safe fallback (part of the same single
+  round). All other former cells are parked in `parked_candidates` and must
+  not be scheduled until all four baseline rounds publish.
+- **A classified negative verdict (startup, compatibility, capacity, or
+  safety failure) completes the round** — it is a first-class outcome, not a
+  reason to iterate into wider optimization.
+- The full five-family evaluation suite is PARKED until all four model
+  baselines publish; see `docs/03-evaluation-plan.md`.
+
+The two gates above remain unchanged and binding.
+
 **Safety rule:** checkpoint download, software builds, and GPU use are
 **prohibited** until `seanphan/pixelml#57` clears and `seanphan/pixelml#52`
 grants an exclusive four-CMP lease. See `AGENTS.md` and
