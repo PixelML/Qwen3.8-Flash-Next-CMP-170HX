@@ -3,8 +3,8 @@
 Status: PIN + PREFETCHED. Verified bytes for this candidate now exist on
 shared storage (transfer receipt: `docs/11-intel-prefetch-receipt.md`); no
 build, model load, or GPU use has happened for it. Compute remains blocked
-until #52 grants #56 the four-card lane after a fresh authoritative live
-preflight.
+until the master control-plane queue grants this lane the four-card lease
+after a fresh authoritative live preflight.
 
 ## Pinned identity (all measured from Hub metadata APIs, 2026-08-31)
 
@@ -68,6 +68,5 @@ preflight.
 - Candidates: cyankiwi AWQ INT4 @ d39638a0 (baseline) vs Intel RTN W4A16 @
   a729382b. One bounded round each, same harness/prompts/context/concurrency,
   one terminal verdict (best recipe or reproducible negative).
-- Gate: only after #52 explicitly grants #56 the four-card lane following the
-  fresh authoritative live preflight (per #52 comment 5474393282 and owner
-  command 5475201650).
+- Gate: only after the master control-plane queue explicitly grants this lane
+  the four-card lease following the fresh authoritative live preflight.

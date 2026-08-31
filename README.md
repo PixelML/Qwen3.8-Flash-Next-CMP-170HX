@@ -13,8 +13,9 @@ AutoRound (`Intel/Qwen3.8-Flash-Next-W4A16-RTN-AutoRound` @ `a729382b`,
 prefetched to shared storage and verified: 146/146 files exact, 133/133 LFS
 SHA256 OK; see `docs/10-intel-rtn-w4a16.md` and
 `docs/11-intel-prefetch-receipt.md`). No throughput/quality
-numbers exist yet: the run is gated on #52 granting the four-card lane after
-a fresh live preflight. When measured, this section becomes the single
+numbers exist yet: the run is gated on the master control-plane queue granting
+the four-card lane after a fresh live preflight. When measured, this section
+becomes the single
 source of truth: best recipe, prefill/decode/aggregate tok/s,
 quality/reliability verdict, topology, and the exact launch command.
 
