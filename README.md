@@ -6,6 +6,16 @@ Qwen3.8-Flash-Next family on four CMP 170HX cards (SM80, 64 GiB each).
 
 ## Status: CHECKPOINT_VERIFIED
 
+**TL;DR (updated as the comparison progresses):** Two candidates are pinned for
+the four-CMP A/B — the current AWQ INT4 baseline (cyankiwi @ `d39638a0`,
+verified on shared storage, 38/38 shards hash-checked) and Intel's RTN W4A16
+AutoRound (`Intel/Qwen3.8-Flash-Next-W4A16-RTN-AutoRound` @ `a729382b`, pinned
+metadata-only; see `docs/10-intel-rtn-w4a16.md`). No throughput/quality
+numbers exist yet: the run is gated on #52 granting the four-card lane after
+a fresh live preflight. When measured, this section becomes the single
+source of truth: best recipe, prefill/decode/aggregate tok/s,
+quality/reliability verdict, topology, and the exact launch command.
+
 
 Research-prep state. The storage gate was released on 2026-08-31
 ([seanphan/pixelml#56 comment](https://github.com/seanphan/pixelml/issues/56#issuecomment-5473633322));
