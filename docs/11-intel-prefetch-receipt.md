@@ -1,8 +1,8 @@
 # 11 — Intel RTN W4A16 prefetch receipt (sanitized)
 
 Status: TRANSFER_COMPLETE_PASS. One resumable lane, shared storage only.
-No build, no model load, no GPU use. Compute remains gated on #52 granting
-#56 the four-card lane after a fresh live preflight.
+No build, no model load, no GPU use. Compute remains gated on an exclusive
+four-card lease after a fresh live preflight.
 
 ## Pinned transfer (2026-08-31)
 
@@ -10,9 +10,8 @@ No build, no model load, no GPU use. Compute remains gated on #52 granting
   @ `a729382b72baabf11a6c10f35e9042b98cc06ef3`
 - Destination: `/library/models/qwen38/Intel-Qwen3.8-Flash-Next-W4A16-RTN-AutoRound`
   (canonical shared model storage; guest root never used for weights)
-- Trigger: GLM lane integrity PASS + bounded boot start, recorded at
-  [seanphan/pixelml#52 comment 5476249910](https://github.com/seanphan/pixelml/issues/52#issuecomment-5476249910)
-  and [seanphan/pixelml#66 comment 5476249698](https://github.com/seanphan/pixelml/issues/66#issuecomment-5476249698)
+- Trigger: GLM lane integrity PASS + bounded boot start, recorded in internal
+  tracking.
 
 ## Verification gates (all measured)
 

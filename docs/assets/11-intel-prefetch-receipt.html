@@ -81,7 +81,7 @@
       <tr><td>GLM I/O guard</td><td class="ok">clean</td><td>60 s polling · zero impact · zero pauses</td></tr>
     </table>
   </div>
-  <div class="gate">GATED — no build, no model load, no GPU use. Four-card CMP 170HX lease remains with the GLM lane until #52 explicitly grants #56 after a fresh live preflight.</div>
-  <div class="foot">Evidence: PixelML/Qwen3.8-Flash-Next-CMP-170HX · docs/11-intel-prefetch-receipt.md · seanphan/pixelml#56 receipt 5477318495 · Baseline cyankiwi AWQ INT4 reused (38/38 shards), never re-downloaded.</div>
+  <div class="gate">GATED — no build, no model load, no GPU use. Four-card CMP 170HX compute requires an exclusive lease after a fresh live preflight.</div>
+  <div class="foot">Evidence: PixelML/Qwen3.8-Flash-Next-CMP-170HX · docs/11-intel-prefetch-receipt.md · Baseline cyankiwi AWQ INT4 reused (38/38 shards), never re-downloaded.</div>
 </body>
 </html>
