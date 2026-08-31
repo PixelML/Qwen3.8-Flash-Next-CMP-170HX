@@ -4,17 +4,22 @@ Static-fit math, runtime compatibility, and evaluation harness for the
 **Qwen3.8-Flash-Next-AWQ-INT4** checkpoint and future variants of the
 Qwen3.8-Flash-Next family on four CMP 170HX cards (SM80, 64 GiB each).
 
-## Status: WAITING_RESOURCE
+## Status: STORAGE_PREP
 
-This repository is in a research-prep state. **No checkpoint has been
-downloaded, nothing has been built, and no GPU has been used.**
 
-Two gates must clear before any resource-consuming work:
+Research-prep state. The storage gate was released on 2026-08-31
+([seanphan/pixelml#56 comment](https://github.com/seanphan/pixelml/issues/56#issuecomment-5473633322));
+the pinned checkpoint is being transferred by **one resumable lane** to
+`/library/models/qwen38/Qwen3.8-Flash-Next-AWQ-INT4`, with exact file count,
+byte total, and per-shard LFS SHA256 verification before the lane is released.
+Nothing has been built, no weights have been loaded, and no GPU has been used.
+
+Two gates must still clear before any resource-consuming work:
 
 1. **Upstream gate** — the required vLLM support
    ([vllm-project/vllm#53899](https://github.com/vllm-project/vllm/pull/53899))
-   is still OPEN with `mergeable_state: dirty` (measured via API on
-   2026-08-30). See `docs/02-runtime-compatibility.md` for the decision gate.
+   must reach the decision gate defined in `docs/02-runtime-compatibility.md`
+   (last measured 2026-08-31: OPEN, `mergeable_state: dirty`).
 2. **Resource gate** — an exclusive four-CMP lease from
    [seanphan/pixelml#52](https://github.com/seanphan/pixelml/issues/52),
    requested only after [seanphan/pixelml#57](https://github.com/seanphan/pixelml/issues/57)
