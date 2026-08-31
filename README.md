@@ -4,14 +4,16 @@ Static-fit math, runtime compatibility, and evaluation harness for the
 **Qwen3.8-Flash-Next-AWQ-INT4** checkpoint and future variants of the
 Qwen3.8-Flash-Next family on four CMP 170HX cards (SM80, 64 GiB each).
 
-## Status: STORAGE_PREP
+## Status: CHECKPOINT_VERIFIED
 
 
 Research-prep state. The storage gate was released on 2026-08-31
 ([seanphan/pixelml#56 comment](https://github.com/seanphan/pixelml/issues/56#issuecomment-5473633322));
-the pinned checkpoint is being transferred by **one resumable lane** to
-`/library/models/qwen38/Qwen3.8-Flash-Next-AWQ-INT4`, with exact file count,
-byte total, and per-shard LFS SHA256 verification before the lane is released.
+the pinned checkpoint was transferred by **one resumable lane** to
+`/library/models/qwen38/Qwen3.8-Flash-Next-AWQ-INT4` and verified: 50/50
+files present at exact expected sizes, 38/38 safetensors shards matching
+their LFS SHA256, safetensors byte total exactly 188,286,106,928. The lane
+was released after verification (receipt on the tracking issue).
 Nothing has been built, no weights have been loaded, and no GPU has been used.
 
 Two gates must still clear before any resource-consuming work:
