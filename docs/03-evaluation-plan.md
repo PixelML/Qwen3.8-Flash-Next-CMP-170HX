@@ -5,13 +5,10 @@ target platform. Execution requires the gates in `README.md` to clear.
 
 ## Baseline round scope
 
-Per the owner's narrowing of `seanphan/pixelml#56`
-(<https://github.com/seanphan/pixelml/issues/56#issuecomment-5468770817>) and
-master policy
-(<https://github.com/seanphan/pixelml/issues/52#issuecomment-5468770811>),
-the next execution is **ONE fixed baseline round** — not the full suite
-below. The round consists of exactly one fixed measurement set on the two
-ACTIVE matrix cells (`eval/configs/matrix.yaml`):
+Per the owner's scope recorded in internal tracking, the next execution is
+**ONE fixed baseline round** — not the full suite below. The round consists of
+exactly one fixed measurement set on the two ACTIVE matrix cells
+(`eval/configs/matrix.yaml`):
 
 1. **Startup / compatibility verdict** — launch the primary cell; record
    launch success/failure and a classified verdict

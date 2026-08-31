@@ -7,13 +7,12 @@ Qwen3.8-Flash-Next family on four CMP 170HX cards (SM80, 64 GiB each).
 ## Status: CHECKPOINT_VERIFIED
 
 
-Research-prep state. The storage gate was released on 2026-08-31
-([seanphan/pixelml#56 comment](https://github.com/seanphan/pixelml/issues/56#issuecomment-5473633322));
-the pinned checkpoint was transferred by **one resumable lane** to
+Research-prep state. The storage gate was released on 2026-08-31 in internal
+tracking; the pinned checkpoint was transferred by **one resumable lane** to
 `/library/models/qwen38/Qwen3.8-Flash-Next-AWQ-INT4` and verified: 50/50
 files present at exact expected sizes, 38/38 safetensors shards matching
 their LFS SHA256, safetensors byte total exactly 188,286,106,928. The lane
-was released after verification (receipt on the tracking issue).
+was released after verification (receipt retained in internal tracking).
 Nothing has been built, no weights have been loaded, and no GPU has been used.
 
 Two gates must still clear before any resource-consuming work:
@@ -22,20 +21,15 @@ Two gates must still clear before any resource-consuming work:
    ([vllm-project/vllm#53899](https://github.com/vllm-project/vllm/pull/53899))
    must reach the decision gate defined in `docs/02-runtime-compatibility.md`
    (last measured 2026-08-31: OPEN, `mergeable_state: dirty`).
-2. **Resource gate** — an exclusive four-CMP lease from
-   [seanphan/pixelml#52](https://github.com/seanphan/pixelml/issues/52),
-   requested only after [seanphan/pixelml#57](https://github.com/seanphan/pixelml/issues/57)
-   is resolved and the upstream decision gate is met.
-
-Tracking issue: <https://github.com/seanphan/pixelml/issues/56>
+2. **Resource gate** — an exclusive four-CMP lease recorded in the private
+   control plane, requested only after the preceding workload is resolved and
+   the upstream decision gate is met.
 
 ## Scope: one baseline round
 
-The owner has narrowed `seanphan/pixelml#56` to **ONE** Qwen3.8-Flash-Next
-AWQ INT4 baseline round (or a reproducible negative verdict), per
-[the owner's narrowing comment](https://github.com/seanphan/pixelml/issues/56#issuecomment-5468770817)
-and the master policy comment
-[seanphan/pixelml#52#issuecomment-5468770811](https://github.com/seanphan/pixelml/issues/52#issuecomment-5468770811).
+The owner has narrowed the next execution to **ONE** Qwen3.8-Flash-Next AWQ
+INT4 baseline round (or a reproducible negative verdict), as recorded in
+internal tracking.
 
 - `eval/configs/matrix.yaml` keeps exactly two ACTIVE cells for this round:
   the primary baseline cell and its safe fallback (part of the same single
@@ -50,8 +44,8 @@ and the master policy comment
 The two gates above remain unchanged and binding.
 
 **Safety rule:** checkpoint download, software builds, and GPU use are
-**prohibited** until `seanphan/pixelml#57` clears and `seanphan/pixelml#52`
-grants an exclusive four-CMP lease. See `AGENTS.md` and
+**prohibited** until the preceding workload clears and the private control
+plane grants an exclusive four-CMP lease. See `AGENTS.md` and
 `scripts/preflight-checklist.md`.
 
 ## What is here

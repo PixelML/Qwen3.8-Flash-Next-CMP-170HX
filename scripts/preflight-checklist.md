@@ -5,20 +5,17 @@ Post-run section is mandatory before releasing the lease.
 
 ## 0. Lease and gate check (hard blockers)
 
-- [ ] `seanphan/pixelml#57` is resolved/cleared (record date).
-- [ ] Lease order verified per current master policy
-      (<https://github.com/seanphan/pixelml/issues/52#issuecomment-5469737981>):
-      GLM (#47, executed via #61) completes **first**; this #56 round is
-      **second**; DeepSeek #65 is third. Record GLM release evidence before
-      any #56 lease use.
-- [ ] Exclusive **four-CMP** lease granted in `seanphan/pixelml#52` for this
-      exact window; no other workload scheduled on the node.
+- [ ] The preceding workload is resolved/cleared in internal tracking (record date).
+- [ ] Lease order verified against the current private control-plane policy;
+      record release evidence for the preceding workload before this lease.
+- [ ] Exclusive **four-CMP** lease granted in the private control plane for
+      this exact window; no other workload scheduled on the node.
 - [ ] Upstream decision gate met per `docs/02-runtime-compatibility.md`
       (PR #53899 merged / rebased / pinned branch with SM80 AWQ/GDN/PLE
       evidence). Re-measure PR state, `mergeable_state`, head SHA today and
       record it.
-- [ ] The lease window, cards, and purpose are posted to the tracking issue
-      (`seanphan/pixelml#56`) before starting.
+- [ ] The lease window, cards, and purpose are recorded in internal tracking
+      before starting.
 
 ## 1. Storage check
 
@@ -82,5 +79,5 @@ Post-run section is mandatory before releasing the lease.
 - [ ] Run manifest completed and validated against
       `eval/configs/run-manifest.schema.json`; raw outputs referenced.
 - [ ] Repository still contains **no weights and no large files**.
-- [ ] Lease released in `seanphan/pixelml#52` with a short outcome note;
-      tracking issue `seanphan/pixelml#56` updated with manifest link.
+- [ ] Lease released in the private control plane with a short outcome note;
+      internal tracking updated with the manifest link.
