@@ -39,8 +39,7 @@ During the single AWQ INT4 baseline round (see `docs/03-evaluation-plan.md`):
 - Record **every patch and commit** (vLLM head, kernels, any local diffs) in
   the run manifest (`eval/configs/run-manifest.schema.json`).
 - **No optimization patches** during the baseline round; optimization work is
-  parked per
-  <https://github.com/seanphan/pixelml/issues/52#issuecomment-5468770811>.
+  parked by the current internal policy.
 
 ## Auxiliary-GPU PLE offload (optional path)
 

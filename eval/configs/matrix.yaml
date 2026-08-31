@@ -3,9 +3,7 @@
 # EVERY entry is a CANDIDATE only. Every item status is untested.
 # Do not execute anything until the gates in the repository README clear.
 #
-# Scope: exactly ONE baseline round (per seanphan/pixelml#56, narrowed by
-# https://github.com/seanphan/pixelml/issues/56#issuecomment-5468770817 and
-# master policy https://github.com/seanphan/pixelml/issues/52#issuecomment-5468770811).
+# Scope: exactly ONE baseline round, as recorded in internal tracking.
 # The two ACTIVE cells below belong to that single round; everything else is parked.
 
 matrix:
@@ -34,8 +32,7 @@ matrix:
     status: untested
 
 parked_candidates:
-  # Parked per pixelml#52#issuecomment-5468770811
-  # (https://github.com/seanphan/pixelml/issues/52#issuecomment-5468770811);
+  # Parked by the current internal policy;
   # do not schedule until all four baseline rounds publish.
   - id: awq-ple-cpu-mtp-on-k3
     description: >

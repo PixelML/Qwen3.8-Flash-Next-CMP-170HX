@@ -57,10 +57,10 @@ weights, or launch GPU workloads without explicit user authorization for that
 action.
 
 For this repository, checkpoint download, software builds, and any GPU use are
-additionally prohibited until the upstream gate clears (see `README.md`) and an
-exclusive four-CMP lease is granted in `seanphan/pixelml#52` after
-`seanphan/pixelml#57` is resolved. Do not request the lease before the
-decision gate in `docs/02-runtime-compatibility.md` is met.
+additionally prohibited until the upstream gate clears (see `README.md`), the
+preceding workload is resolved, and an exclusive four-CMP lease is granted in
+the private control plane. Do not request the lease before the decision gate
+in `docs/02-runtime-compatibility.md` is met.
 
 For any later authorized GPU work: confirm forced airflow before load; stop at
 80 C core or 85 C memory temperature; stop on Xid errors, GPU disappearance,
