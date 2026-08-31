@@ -1,9 +1,10 @@
 # 10 — Intel Qwen3.8-Flash-Next W4A16 RTN AutoRound (candidate pin)
 
-Status: REPO-ONLY PIN. No bytes for this candidate exist on shared storage yet;
-no download, build, load, or GPU use has happened for it. Compute remains
-blocked until #52 grants #56 the four-card lane after a fresh authoritative
-live preflight.
+Status: PIN + PREFETCHED. Verified bytes for this candidate now exist on
+shared storage (transfer receipt: `docs/11-intel-prefetch-receipt.md`); no
+build, model load, or GPU use has happened for it. Compute remains blocked
+until #52 grants #56 the four-card lane after a fresh authoritative live
+preflight.
 
 ## Pinned identity (all measured from Hub metadata APIs, 2026-08-31)
 
